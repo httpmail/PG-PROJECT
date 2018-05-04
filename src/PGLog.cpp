@@ -56,9 +56,9 @@ namespace PG{
             pos = file.find_first_of('/');
         }
 
-        auto head_len = sprintf_s(log, max_head_bytes, "%s: %lld %s %s [%d] :",
+        auto head_len = sprintf_s(log, max_head_bytes, "%s: %s %s %s [%d] :",
             GetLevelName(eLevel),
-            GetMilliTimeStamp(), 
+            Timestamp2StrMilliseconds(GetTimeStamp()).c_str(),
             pModule ? pModule : "UnRegisterred Module",
             file.substr(pos + 1).c_str(), 
             line);
