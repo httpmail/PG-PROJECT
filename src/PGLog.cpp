@@ -32,9 +32,20 @@ namespace {
     }
 }
 namespace PG{
+
+    Log::Log() :
+        m_quit(false)
+    {
+    }
+
+    Log::~Log()
+    {
+    }
+
     bool Log::Initilize(const std::string& logPath /*= nullptr*/)
     {
         m_pthread = new std::thread(&Log::WrittingThread, this);
+
         if (!m_pthread)
             return false;
 
@@ -43,7 +54,7 @@ namespace PG{
 
     void Log::Output(const char *pModule, const char *pFile, int line, Level eLevel, const char *pFormat, ...)
     {
-        assert(pFormat && pFile);
+        assert(pFormat && pFile && m_pthread);
         static const int max_log_bytes(1024);
         static const int max_head_bytes(256);
 
@@ -85,6 +96,7 @@ namespace PG{
             {
                 assert(pOwn->m_logs.size());
                 LogContainer logs(pOwn->m_logs.begin(), pOwn->m_logs.end());
+                pOwn->m_logs.clear();
                 writting_lock.unlock();
 
                 for (auto log : logs)

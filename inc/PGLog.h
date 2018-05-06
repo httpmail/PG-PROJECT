@@ -9,6 +9,11 @@
 
 class std::thread;
 
+#define LOG_INFO(_module, _fmt, ...)          PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Info, _fmt, ##__VA_ARGS__)
+#define LOG_WARNING(_module, _fmt, ...) PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Warning, _fmt, ##__VA_ARGS__)
+#define LOG_ERROR(_module, _fmt, ...)       PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Error, _fmt, ##__VA_ARGS__)
+
+
 namespace PG{
     class Log {
     public:
@@ -21,7 +26,7 @@ namespace PG{
     public:
         static Log& Instance() { static Log sLog; return sLog; }
 
-        bool Initilize(const std::string& logPath = nullptr);
+        bool Initilize(const std::string& logPath = "");
         void Output(const char *pModule, const char *pFile, int line, Level eLevel, const char *pFormat, ...);
 
     public:
