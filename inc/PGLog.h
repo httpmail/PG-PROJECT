@@ -9,10 +9,9 @@
 
 class std::thread;
 
-#define LOG_INFO(_module, _fmt, ...)          PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Info, _fmt, ##__VA_ARGS__)
-#define LOG_WARNING(_module, _fmt, ...) PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Warning, _fmt, ##__VA_ARGS__)
-#define LOG_ERROR(_module, _fmt, ...)       PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Error, _fmt, ##__VA_ARGS__)
-
+#define PG_LOG_INFO(_module, _fmt, ...)     PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Info, _fmt, ##__VA_ARGS__)
+#define PG_LOG_WARNING(_module, _fmt, ...)  PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Warning, _fmt, ##__VA_ARGS__)
+#define PG_LOG_ERROR(_module, _fmt, ...)    PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Error, _fmt, ##__VA_ARGS__)
 
 namespace PG{
     class Log {
@@ -48,10 +47,8 @@ namespace PG{
 
         std::thread *m_pthread;
  
-        std::condition_variable    m_writting_condition;
-        std::mutex                          m_writting_mutex;
+        std::condition_variable m_writting_condition;
+        std::mutex              m_writting_mutex;
 
-        std::condition_variable    m_quit_condition;
-        std::mutex                          m_quit_mutex;
     };
 }

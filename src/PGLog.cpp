@@ -40,6 +40,18 @@ namespace PG{
 
     Log::~Log()
     {
+        {
+            ConditionLock lock(m_writting_mutex);
+            m_writting_condition.wait(lock, [this] {
+                return this->m_logs.empty();
+            });
+            m_quit = true;
+        }
+
+        m_writting_condition.notify_one();
+
+        if(m_pthread->joinable())
+            m_pthread->join();
     }
 
     bool Log::Initilize(const std::string& logPath /*= nullptr*/)
@@ -55,8 +67,15 @@ namespace PG{
     void Log::Output(const char *pModule, const char *pFile, int line, Level eLevel, const char *pFormat, ...)
     {
         assert(pFormat && pFile && m_pthread);
+
         static const int max_log_bytes(1024);
         static const int max_head_bytes(256);
+
+        {
+            MutexLockGuard lock(m_writting_mutex);
+            if (m_quit)
+                return;
+        }
 
         char log[1024];
 
@@ -67,7 +86,7 @@ namespace PG{
             pos = file.find_first_of('/');
         }
 
-        auto head_len = sprintf_s(log, max_head_bytes, "%s: %s %s %s [%d] :",
+        auto head_len = sprintf_s(log, max_head_bytes, "%-7s: %s %s %s [%d] :",
             GetLevelName(eLevel),
             Timestamp2StrMilliseconds(GetTimeStamp()).c_str(),
             pModule ? pModule : "UnRegisterred Module",
@@ -88,20 +107,25 @@ namespace PG{
     {
         assert(pOwn);
 
-        ConditionLock quit_lock(pOwn->m_quit_mutex);
-        while (!pOwn->m_quit_condition.wait_for(quit_lock, std::chrono::milliseconds(0), [&pOwn] {return pOwn->m_quit; }))
+        while(1)
         {
             ConditionLock  writting_lock(pOwn->m_writting_mutex);
-            if (pOwn->m_writting_condition.wait_for(writting_lock, std::chrono::seconds(1), [&pOwn] { return !pOwn->m_logs.empty(); }))
-            {
-                assert(pOwn->m_logs.size());
-                LogContainer logs(pOwn->m_logs.begin(), pOwn->m_logs.end());
-                pOwn->m_logs.clear();
-                writting_lock.unlock();
+            pOwn->m_writting_condition.wait(writting_lock, [&pOwn] { return !pOwn->m_logs.empty() || pOwn->m_quit; });
 
-                for (auto log : logs)
-                    std::cout << log << std::endl;
-            }
+            if (pOwn->m_quit && pOwn->m_logs.empty())
+                break;
+
+            bool bQuit = pOwn->m_quit;
+            LogContainer logs(pOwn->m_logs.begin(), pOwn->m_logs.end());
+            pOwn->m_logs.clear();
+            writting_lock.unlock();
+            pOwn->m_writting_condition.notify_one();
+
+            for (auto log : logs)
+                std::cout << log << std::endl;
+
+            if (bQuit)
+                break;
         }
     }
 }

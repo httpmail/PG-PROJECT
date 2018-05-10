@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\project\PG-PROJECT\inc;$(IncludePath)</IncludePath>
+    <IncludePath>D:\thirdparty\boost_1_66_0;D:\project\PG-PROJECT\inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -141,8 +141,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\inc\PGAnimation.h" />
     <ClInclude Include="..\inc\PGDef.h" />
     <ClInclude Include="..\inc\PGLog.h" />
+    <ClInclude Include="..\inc\PGMetadata.h" />
     <ClInclude Include="..\inc\PGThread.h" />
     <ClInclude Include="..\inc\PGUtil.h" />
   </ItemGroup>
