@@ -13,6 +13,7 @@ class std::thread;
 #define PG_LOG_WARNING(_module, _fmt, ...)  PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Warning, _fmt, ##__VA_ARGS__)
 #define PG_LOG_ERROR(_module, _fmt, ...)    PG::Log::Instance().Output(_module, __FILE__, __LINE__, PG::Log::Level::Error, _fmt, ##__VA_ARGS__)
 
+
 namespace PG{
     class Log {
     public:

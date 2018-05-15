@@ -15,16 +15,13 @@
     <ClInclude Include="..\inc\PGDef.h">
       <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\PGThread.h">
-      <Filter>inc</Filter>
-    </ClInclude>
     <ClInclude Include="..\inc\PGUtil.h">
       <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\PGAnimation.h">
+    <ClInclude Include="..\inc\PGRenderWindow.h">
       <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\PGMetadata.h">
+    <ClInclude Include="..\inc\WinRenderWindow.h">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -34,6 +31,9 @@
     </ClCompile>
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\src\PGUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinRenderWindow.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

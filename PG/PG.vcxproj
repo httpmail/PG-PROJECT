@@ -141,17 +141,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\inc\PGAnimation.h" />
     <ClInclude Include="..\inc\PGDef.h" />
     <ClInclude Include="..\inc\PGLog.h" />
-    <ClInclude Include="..\inc\PGMetadata.h" />
-    <ClInclude Include="..\inc\PGThread.h" />
+    <ClInclude Include="..\inc\PGRenderWindow.h" />
     <ClInclude Include="..\inc\PGUtil.h" />
+    <ClInclude Include="..\inc\WinRenderWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\src\PGLog.cpp" />
     <ClCompile Include="..\src\PGUtil.cpp" />
+    <ClCompile Include="..\src\WinRenderWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
