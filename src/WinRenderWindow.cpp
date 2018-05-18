@@ -21,20 +21,21 @@ bool PG::WinRenderWindow::Create(uint32_t w, uint32_t h, bool bFullScreen /* =fa
     m_bfullscreen = bFullScreen;
     m_appName     = name;
 
+    m_hInstance     = GetModuleHandle(NULL);
+
     WNDCLASSEX wc;
-    m_hInstance = GetModuleHandle(NULL);
-    wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wc.lpfnWndProc = WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = m_hInstance;
-    wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-    wc.hIconSm = wc.hIcon;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-    wc.lpszMenuName = NULL;
-    wc.lpszClassName = m_appName.c_str();
-    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.cbSize       = sizeof(wc);
+    wc.style        = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    wc.lpfnWndProc  = WndProc;
+    wc.cbClsExtra   = 0;
+    wc.cbWndExtra   = 0;
+    wc.hInstance    = m_hInstance;
+    wc.hIcon        = LoadIcon(NULL, IDI_WINLOGO);
+    wc.hIconSm      = wc.hIcon;
+    wc.hCursor      = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground    = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    wc.lpszMenuName     = NULL;
+    wc.lpszClassName    = m_appName.c_str();
 
     RegisterClassEx(&wc);
 
@@ -47,11 +48,13 @@ bool PG::WinRenderWindow::Create(uint32_t w, uint32_t h, bool bFullScreen /* =fa
         // If full screen set the screen to maximum size of the users desktop and 32bit.
         DEVMODE dmScreenSettings;
         memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
-        dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-        dmScreenSettings.dmPelsWidth = static_cast<INT>(screenWidth);
-        dmScreenSettings.dmPelsHeight = static_cast<INT>(screenHeight);
-        dmScreenSettings.dmBitsPerPel = 32;
-        dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+        dmScreenSettings.dmSize         = sizeof(dmScreenSettings);
+        dmScreenSettings.dmPelsWidth    = static_cast<INT>(screenWidth);
+        dmScreenSettings.dmPelsHeight   = static_cast<INT>(screenHeight);
+        dmScreenSettings.dmBitsPerPel   = 32;
+        dmScreenSettings.dmFields       = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
         ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
     }
     else
